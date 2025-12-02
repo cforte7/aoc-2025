@@ -1,1 +1,3 @@
 src/inputs
+.zig-cache
+zig-out
