@@ -1,11 +1,11 @@
-const common = @import("common");
+const io = @import("common/io.zig");
 const std = @import("std");
 
 pub fn main() !void {
     std.debug.print("Starting day 1\n", .{});
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const alloc = gpa.allocator();
-    const res = common.readAllLines(alloc, "src/inputs/day01.txt") catch |err| {
+    const res = io.readFileToLines(alloc, "src/inputs/day01.txt") catch |err| {
         std.debug.print("Error: {}\n", .{err});
         return;
     };
