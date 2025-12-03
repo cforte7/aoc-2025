@@ -1,5 +1,19 @@
 const std = @import("std");
 
+pub fn readFileWithSplit(alloc: std.mem.Allocator, path: []const u8, splitChar: u8) ![][]const u8 {
+    const file_buf: []u8 = try std.fs.cwd().readFileAlloc(alloc, path, 18 * 1024 * 1024);
+    defer alloc.free(file_buf);
+
+    var it = std.mem.splitScalar(u8, file_buf, splitChar);
+    var list = try std.ArrayList([]const u8).initCapacity(alloc, 0);
+
+    while (it.next()) |line| {
+        const copy = try alloc.dupe(u8, line);
+        try list.append(alloc, std.mem.trim(u8, copy, "\n"));
+    }
+    return try list.toOwnedSlice(alloc);
+}
+
 pub fn readFileToLines(alloc: std.mem.Allocator, path: []const u8) ![][]u8 {
     const file_buf = try std.fs.cwd().readFileAlloc(alloc, path, 18 * 1024 * 1024);
 
